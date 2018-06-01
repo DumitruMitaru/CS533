@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <sys/time.h>
+#include <sys/resource.h>
 #include <stdlib.h>
 #include <fcntl.h>
 
