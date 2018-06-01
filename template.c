@@ -5,7 +5,7 @@
 #include <sys/resource.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include <random.h>
+#include <linux/random.h>
 
 int main(int argc, char* argv[])
 {
