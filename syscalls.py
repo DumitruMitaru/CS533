@@ -19,7 +19,7 @@ systemcalls = [
 #	('write', 'syscall(SYS_write);', '', 1000),
 # Device Management
 # Information Maintenence
-	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage', 'struct rusage usage;', 1000),
+	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', 1000),
 	('gettimeofday', 'syscall(SYS_gettimeofday, &t, NULL);', 'struct timeval t;', 1000),
 # Communication
 # ('sigaction', 'syscall(SYS_sigaction,...);, '', 1000) 
