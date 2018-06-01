@@ -13,10 +13,10 @@ systemcalls = [
 #	('wait' 'syscall(SYS_wait4, pid);', 'int pid = fork();', 1000),
 	('brk', 'syscall(SYS_brk);', '', 1000),
 # File Management
-#	('open', 'syscall(SYS_open, "test.txt");', '', 1000),
+	('open', 'open("test.txt", O_WRONLY);', '', 1000),
 	('close', 'syscall(SYS_close, fd);', 'int fd = open("test.txt", O_WRONLY);', 1000),
-#	('read', 'syscall(SYS_read);', '', 1000),
-#	('write', 'syscall(SYS_write);', '', 1000),
+	('read', 'fscanf(fp,"%s", buff);', 'char buff[255]; FILE* fp = fopen("test.txt", "r");', 1000),
+	('write', 'fprintf(fp, "data");', 'FILE* fp = fopen("test.txt", "w+");', 1000),
 # Device Management
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', 1000),
