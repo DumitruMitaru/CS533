@@ -21,6 +21,9 @@ systemcalls = [
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', 1000),
 	('gettimeofday', 'syscall(SYS_gettimeofday, &t, NULL);', 'struct timeval t;', 1000),
+        ('clock_gettime', 'syscall(SYS_clock_gettime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000), 
+        ('clock_getres', 'syscall(SYS_clock_getres, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000),
+#        ('clock_settime', 'syscall(SYS_clock_settime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec; time_spec.tv_sec = 64; time_spec.tv_nsec = 64;', 1000),
 # Communication
 # ('sigaction', 'syscall(SYS_sigaction,...);, '', 1000) 
 # ('sigreturn', 'syscall(SYS_sigreturn,...);, '', 1000) 
