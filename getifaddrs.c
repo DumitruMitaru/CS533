@@ -13,9 +13,9 @@ int main(int argc, char* argv[])
 	struct timeval end;
 	long diff;
 	int rc;
-	// Extra Code
+	struct ifaddrs *ifaddr, *ifa;
 	gettimeofday(&start, NULL);
-	rc = XXX;
+	rc = getifaddrs(&ifaddr);
 	gettimeofday(&end, NULL);
 	if(rc == -1)
 		printf("-1,");

@@ -13,9 +13,9 @@ int main(int argc, char* argv[])
 	struct timeval end;
 	long diff;
 	int rc;
-	// Extra Code
+	struct rusage usage;
 	gettimeofday(&start, NULL);
-	rc = XXX;
+	rc = syscall(SYS_getrusage, RUSAGE_SELF, &usage);
 	gettimeofday(&end, NULL);
 	if(rc == -1)
 		printf("-1,");

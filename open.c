@@ -13,9 +13,9 @@ int main(int argc, char* argv[])
 	struct timeval end;
 	long diff;
 	int rc;
-	// Extra Code
+	
 	gettimeofday(&start, NULL);
-	rc = XXX;
+	rc = open("test.txt", O_WRONLY);;
 	gettimeofday(&end, NULL);
 	if(rc == -1)
 		printf("-1,");

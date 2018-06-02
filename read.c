@@ -13,9 +13,9 @@ int main(int argc, char* argv[])
 	struct timeval end;
 	long diff;
 	int rc;
-	// Extra Code
+	char buff[255]; FILE* fp = fopen("test.txt", "r");
 	gettimeofday(&start, NULL);
-	rc = XXX;
+	rc = fscanf(fp,"%s", buff);;
 	gettimeofday(&end, NULL);
 	if(rc == -1)
 		printf("-1,");
