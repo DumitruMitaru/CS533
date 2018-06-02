@@ -18,7 +18,8 @@ systemcalls = [
 #	('read', 'syscall(SYS_read);', '', 1000),
 #	('write', 'syscall(SYS_write);', '', 1000),
 # Device Management
-	('ioctl', 'syscall(SYS_ioctl, fd, RNDZAPENTCNT, NULL);', 'int fd = open("/dev/random", O_RDONLY);', 1000),
+	('ioctl_random', 'syscall(SYS_ioctl, fd, RNDZAPENTCNT, NULL);', 'int fd = open("/dev/random", O_RDONLY);', 1000),
+	('ioctl_tty', 'syscall(SYS_ioctl, fd, TIOCGWINSZ, &winsz);', 'int fd = open("/dev/tty", O_RDONLY); struct winsize winsz;', 1000),
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', 1000),
 	('gettimeofday', 'syscall(SYS_gettimeofday, &t, NULL);', 'struct timeval t;', 1000),

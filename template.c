@@ -3,6 +3,7 @@
 #include <sys/syscall.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <sys/ioctl.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <linux/random.h>
