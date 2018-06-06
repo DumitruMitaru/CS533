@@ -15,11 +15,13 @@ systemcalls = [
 	('kill', 'kill(pid, SIGKILL);', 'pid_t pid = fork(); if(pid == 0) while(1);',1000), 
 #	('wait', 'waitpid(pid, &status, WNOHANG);', 'pid_t pid = fork(); int status;', 1000),
 	('brk', 'syscall(SYS_brk);', '', 1000),
+	('mmap', 'mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, fd, 0);', 'struct stat st; stat("test.txt", &st); int fd = open("test.txt", O_RDONLY, 0);', 1000),
+	('free', ' 0; free(ptr);', 'int* ptr = malloc(10240000);', 1000),
 # File Management
 	('open', 'open("test.txt", O_WRONLY);', '', 1000),
 	('close', 'syscall(SYS_close, fd);', 'int fd = open("test.txt", O_WRONLY);', 1000),
 	('read', 'fscanf(fp,"%s", buff);', 'char buff[255]; FILE* fp = fopen("test.txt", "r");', 1000),
-	('write', 'fprintf(fp, "data");', 'FILE* fp = fopen("test.txt", "w+");', 1000),
+	('write', 'fprintf(fp, "data");', 'FILE* fp = fopen("test.txt", "a");', 1000),
 # Device Management
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', 1000),
