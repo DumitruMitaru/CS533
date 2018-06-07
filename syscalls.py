@@ -16,7 +16,7 @@ systemcalls = [
 #	('wait', 'waitpid(pid, &status, WNOHANG);', 'pid_t pid = fork(); int status;', 1000),
 	('brk', 'syscall(SYS_brk);', '', 1000),
 	('mmap', 'mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, fd, 0);', 'struct stat st; stat("test.txt", &st); int fd = open("test.txt", O_RDONLY, 0);', 1000),
-	('free', ' 0; free(ptr);', 'int* ptr = malloc(10240000);', 1000),
+	('munmap', ' 0; free(ptr);', 'int* ptr = malloc(10240000);', 1000),
 # File Management
 	('open', 'open("test.txt", O_WRONLY);', '', 1000),
 	('close', 'syscall(SYS_close, fd);', 'int fd = open("test.txt", O_WRONLY);', 1000),
@@ -31,8 +31,7 @@ systemcalls = [
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', 1000),
 	('gettimeofday', 'syscall(SYS_gettimeofday, &t, NULL);', 'struct timeval t;', 1000),
-	('stime', 'stime(&t);', 'time_t t;',1000),
-	('getpid', 'getpid();', '', 1000),
+	('stime', 'stime(&t);', 'time_t t = time(NULL); ctime(&t);',1000),
 	('getifaddrs', 'getifaddrs(&ifaddr)', 'struct ifaddrs *ifaddr, *ifa;', 1000)
 # Communication
 # ('sigaction', 'syscall(SYS_sigaction,...);, '', 1000) 
@@ -68,7 +67,7 @@ def Run():
 		output = ""
 		for run in range(runs):
 			output += sp.check_output(os.path.abspath(name))
-		# print name, average(output), 'usec'
+		print name, average(output), 'usec'
 
 def average(output):
 	times = [int(i) for i in output.split(',')[0:-1]] 
