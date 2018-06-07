@@ -31,6 +31,9 @@ systemcalls = [
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', 1000),
 	('gettimeofday', 'syscall(SYS_gettimeofday, &t, NULL);', 'struct timeval t;', 1000),
+	('stime', 'stime(&t);', 'time_t t;',1000),
+	('getpid', 'getpid();', '', 1000),
+	('getifaddrs', 'getifaddrs(&ifaddr)', 'struct ifaddrs *ifaddr, *ifa;', 1000)
 # Communication
 # ('sigaction', 'syscall(SYS_sigaction,...);, '', 1000) 
 # ('sigreturn', 'syscall(SYS_sigreturn,...);, '', 1000) 
@@ -65,7 +68,7 @@ def Run():
 		output = ""
 		for run in range(runs):
 			output += sp.check_output(os.path.abspath(name))
-		print name, average(output), 'usec'
+		# print name, average(output), 'usec'
 
 def average(output):
 	times = [int(i) for i in output.split(',')[0:-1]] 

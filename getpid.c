@@ -1,19 +1,11 @@
-#include <signal.h>
-#include <sys/mman.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <sys/time.h>
 #include <sys/resource.h>
-#include <sys/ioctl.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <ifaddrs.h>
-#include <linux/random.h>
-
 
 int main(int argc, char* argv[])
 {
@@ -21,9 +13,9 @@ int main(int argc, char* argv[])
 	struct timeval end;
 	long diff;
 	int rc;
-	// Extra Code
+	
 	gettimeofday(&start, NULL);
-	rc = XXX;
+	rc = getpid();;
 	gettimeofday(&end, NULL);
 	if(rc == -1)
 		printf("-1,");
