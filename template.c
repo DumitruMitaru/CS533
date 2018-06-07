@@ -14,6 +14,7 @@
 #include <sys/vfs.h>
 #include <ifaddrs.h>
 #include <linux/random.h>
+//#include <time.h> // https://linux.die.net/man/2/stime
 
 int main(int argc, char* argv[])
 {
@@ -21,7 +22,7 @@ int main(int argc, char* argv[])
 	struct timeval end;
 	long diff;
 	int rc;
-	// Extra Code
+        // Extra Code
 	gettimeofday(&start, NULL);
 	rc = XXX;
 	gettimeofday(&end, NULL);
@@ -31,3 +32,5 @@ int main(int argc, char* argv[])
 		diff = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec);
 	printf("%li,", diff);
 }
+
+// https://www.improgrammer.net/type-casting-c-language/
