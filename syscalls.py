@@ -1,5 +1,6 @@
 import subprocess as sp
 import os
+import pdb
 
 # place the system call name, function call, extra code to run before the function call and how many times to run that code in 4 tuple in the list
 # system call number are #defined to SYS_<name> in sys/syscall.h  http://unix.superglobalmegacorp.com/Net2/newsrc/sys/syscall.h.html,
@@ -8,16 +9,25 @@ systemcalls = [
 # ex
 # ('name (can be whatever)', 'system call (must be in c)', 'extra code to run before system call (must be in c)', 'number of iterations'),
 
-# Program Control
+# Process Control
 	('fork', 'syscall(SYS_fork);', '',1000), 
-#	('wait' 'syscall(SYS_wait4, pid);', 'int pid = fork();', 1000),
+	('getpid', 'getpid();', '',1000), 
+	('kill', 'kill(pid, SIGKILL);', 'pid_t pid = fork(); if(pid == 0) while(1);',1000), 
+#	('wait', 'waitpid(pid, &status, WNOHANG);', 'pid_t pid = fork(); int status;', 1000),
 	('brk', 'syscall(SYS_brk);', '', 1000),
+	('mmap', 'mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, fd, 0);', 'struct stat st; stat("test.txt", &st); int fd = open("test.txt", O_RDONLY, 0);', 1000),
+	('free', ' 0; free(ptr);', 'int* ptr = malloc(10240000);', 1000),
 # File Management
 	('open', 'open("test.txt", O_WRONLY);', '', 1000),
 	('close', 'syscall(SYS_close, fd);', 'int fd = open("test.txt", O_WRONLY);', 1000),
 	('read', 'fscanf(fp,"%s", buff);', 'char buff[255]; FILE* fp = fopen("test.txt", "r");', 1000),
-	('write', 'fprintf(fp, "data");', 'FILE* fp = fopen("test.txt", "w+");', 1000),
+	('write', 'fprintf(fp, "data");', 'FILE* fp = fopen("test.txt", "a");', 1000),
 # Device Management
+	('ioctl_random', 'syscall(SYS_ioctl, fd, RNDZAPENTCNT, NULL);', 'int fd = open("/dev/random", O_RDONLY);', 1000),
+	('ioctl_tty', 'syscall(SYS_ioctl, fd, TIOCGWINSZ, &winsz);', 'int fd = open("/dev/tty", O_RDONLY); struct winsize winsz;', 1000),
+	('getitimer', 'syscall(SYS_getitimer, ITIMER_REAL, &curr_value);', 'struct itimerval curr_value;', 1000),
+	('read_random', 'syscall(SYS_read, fd, &buf, 10);', 'int fd = open("/dev/random", O_RDONLY); char buf[10];', 1),
+	('write_null', 'syscall(SYS_write, fd, "123456789", 10);', 'int fd = open("/dev/null", O_WRONLY);', 1000),
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', 1000),
         ('stat', 'syscall(SYS_stat, "test.txt", &stat_buffer)', 'struct stat stat_buffer;', 1000),
@@ -27,11 +37,13 @@ systemcalls = [
 #        ('clock_getres', 'syscall(SYS_clock_getres, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000),
 #        ('clock_settime', 'syscall(SYS_clock_settime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec; time_spec.tv_sec = 64; time_spec.tv_nsec = 64;', 1000),
 	('gettimeofday', 'syscall(SYS_gettimeofday, &time_val, NULL);', 'struct timeval time_val;', 1000),
-#        ('getpid', 'syscall(SYS_getpid)', '', 1000),
-#        ('getppid', 'syscall(SYS_getpid)', '', 1000),
-        ('getuid', 'syscall(SYS_getpid)', '', 1000),
-        ('setuid', 'syscall(SYS_setuid, val)', 'uid_t val = getuid();', 1000), # Setting the process uid to the already existing uid should take as long as setting it elsewhere. Also, permissions may prohibit using any other value easily
+	('getpid', 'getpid();', '', 1000),
+#        ('getppid', 'getppid()', '', 1000),
+        ('getuid', 'getuid()', '', 1000),
+        ('setuid', 'setuid(val)', 'uid_t val = getuid();', 1000), # Setting the process uid to the already existing uid should take as long as setting it elsewhere. Also, permissions may prohibit using any other value easily
  #       ('getgid', 'syscall(SYS_getppid)', '', 1000),
+	('stime', 'stime(&t);', 'time_t t;',1000),
+	('getifaddrs', 'getifaddrs(&ifaddr)', 'struct ifaddrs *ifaddr, *ifa;', 1000)
 # Communication
 # ('sigaction', 'syscall(SYS_sigaction,...);, '', 1000) 
 # ('sigreturn', 'syscall(SYS_sigreturn,...);, '', 1000) 
@@ -66,7 +78,7 @@ def Run():
 		output = ""
 		for run in range(runs):
 			output += sp.check_output(os.path.abspath(name))
-		print name, average(output), 'usec'
+		# print name, average(output), 'usec'
 
 def average(output):
 	times = [int(i) for i in output.split(',')[0:-1]] 
