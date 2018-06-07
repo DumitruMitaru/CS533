@@ -23,6 +23,11 @@ systemcalls = [
 	('read', 'fscanf(fp,"%s", buff);', 'char buff[255]; FILE* fp = fopen("test.txt", "r");', 1000),
 	('write', 'fprintf(fp, "data");', 'FILE* fp = fopen("test.txt", "a");', 1000),
 # Device Management
+	('ioctl_random', 'syscall(SYS_ioctl, fd, RNDZAPENTCNT, NULL);', 'int fd = open("/dev/random", O_RDONLY);', 1000),
+	('ioctl_tty', 'syscall(SYS_ioctl, fd, TIOCGWINSZ, &winsz);', 'int fd = open("/dev/tty", O_RDONLY); struct winsize winsz;', 1000),
+	('getitimer', 'syscall(SYS_getitimer, ITIMER_REAL, &curr_value);', 'struct itimerval curr_value;', 1000),
+	('read_random', 'syscall(SYS_read, fd, &buf, 10);', 'int fd = open("/dev/random", O_RDONLY); char buf[10];', 1),
+	('write_null', 'syscall(SYS_write, fd, "123456789", 10);', 'int fd = open("/dev/null", O_WRONLY);', 1000),
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', 1000),
 	('gettimeofday', 'syscall(SYS_gettimeofday, &t, NULL);', 'struct timeval t;', 1000),
