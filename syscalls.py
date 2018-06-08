@@ -30,10 +30,10 @@ systemcalls = [
 	('write_null', 'syscall(SYS_write, fd, "123456789", 10);', 'int fd = open("/dev/null", O_WRONLY);', 1000),
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', 1000),
-  ('stat', 'syscall(SYS_stat, "test.txt", &stat_buffer)', 'struct stat stat_buffer;', 1000),
-  ('statfs', 'syscall(SYS_statfs, "test.txt", &statfs_buffer)', 'struct statfs statfs_buffer;', 1000),
-  ('time', 'syscall(SYS_time, &time_struct)', 'time_t time_struct;', 1000), # would this take cre of stime?
-  ('clock_gettime', 'syscall(SYS_clock_gettime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000), 
+	('stat', 'syscall(SYS_stat, "test.txt", &stat_buffer)', 'struct stat stat_buffer;', 1000),
+  	('statfs', 'syscall(SYS_statfs, "test.txt", &statfs_buffer)', 'struct statfs statfs_buffer;', 1000),
+  	('time', 'syscall(SYS_time, &time_struct)', 'time_t time_struct;', 1000), # would this take cre of stime?
+  	('clock_gettime', 'syscall(SYS_clock_gettime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000), 
 # ('clock_getres', 'syscall(SYS_clock_getres, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000),
 # ('clock_settime', 'syscall(SYS_clock_settime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec; time_spec.tv_sec = 64; time_spec.tv_nsec = 64;', 1000),
 	('gettimeofday', 'gettimeofday(&time_val, NULL);', 'struct timeval time_val;', 1000),
@@ -43,9 +43,18 @@ systemcalls = [
 	('setuid', 'setuid(val)', 'uid_t val = getuid();', 1000), # Setting the process uid to the already existing uid should take as long as setting it elsewhere. Also, permissions may prohibit using any other value easily
 #	('getgid', 'syscall(SYS_getppid)', '', 1000),
 #	('stime', 'syscall(SYS_stime, &t);', 'time_t t;',1000),
-	('getifaddrs', 'getifaddrs(&ifaddr)', 'struct ifaddrs *ifaddr, *ifa;', 1000)
+	('getifaddrs', 'getifaddrs(&ifaddr)', 'struct ifaddrs *ifaddr, *ifa;', 1000),
+	
 # Communication
-# test
+	('create socket', 'socket(AF_INET , SOCK_STREAM , 0);', '', 1000),
+        # create socket
+        ('connect', 'connect(sck_desc , (struct sockaddr *)&server , sizeof(server));', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("8.8.8.8"); server.sin_family = AF_INET; server.sin_port = htons(443);', 1000),
+        # connect to server
+        ('send', 'send(sck_desc , message_socket , strlen(message_socket) , 0);', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("8.8.8.8"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1"; ', 1000),
+        # send 
+        ('receive', 'recv(sck_desc, reply , 1000 , 0)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("8.8.8.8"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1"; send(sck_desc , message_socket , strlen(message_socket) , 0);', 1000),
+        # close socket
+        ('close socket', 'close(sck_desc);', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("8.8.8.8"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1";', 1000),
 # ('sigaction', 'syscall(SYS_sigaction,...);, '', 1000) 
 # ('sigreturn', 'syscall(SYS_sigreturn,...);, '', 1000) 
 ]
