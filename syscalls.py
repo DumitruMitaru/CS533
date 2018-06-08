@@ -11,7 +11,7 @@ systemcalls = [
 
 # Process Control
 	('fork', 'syscall(SYS_fork);', '',1000), 
-	('getpid', 'getpid();', '',1000), 
+#	('getpid', 'getpid();', '',1000), 
 	('kill', 'kill(pid, SIGKILL);', 'pid_t pid = fork(); if(pid == 0) while(1);',1000), 
 #	('wait', 'waitpid(pid, &status, WNOHANG);', 'pid_t pid = fork(); int status;', 1000),
 	('brk', 'syscall(SYS_brk);', '', 1000),
@@ -30,8 +30,19 @@ systemcalls = [
 	('write_null', 'syscall(SYS_write, fd, "123456789", 10);', 'int fd = open("/dev/null", O_WRONLY);', 1000),
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', 1000),
-	('gettimeofday', 'syscall(SYS_gettimeofday, &t, NULL);', 'struct timeval t;', 1000),
-	('stime', 'stime(&t);', 'time_t t = time(NULL); ctime(&t);',1000),
+  ('stat', 'syscall(SYS_stat, "test.txt", &stat_buffer)', 'struct stat stat_buffer;', 1000),
+  ('statfs', 'syscall(SYS_statfs, "test.txt", &statfs_buffer)', 'struct statfs statfs_buffer;', 1000),
+  ('time', 'syscall(SYS_time, &time_struct)', 'time_t time_struct;', 1000), # would this take cre of stime?
+  ('clock_gettime', 'syscall(SYS_clock_gettime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000), 
+# ('clock_getres', 'syscall(SYS_clock_getres, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000),
+# ('clock_settime', 'syscall(SYS_clock_settime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec; time_spec.tv_sec = 64; time_spec.tv_nsec = 64;', 1000),
+	('gettimeofday', 'gettimeofday(&time_val, NULL);', 'struct timeval time_val;', 1000),
+	('getpid', 'getpid()', '', 1000),
+#	('getppid', 'getppid()', '', 1000),
+	('getuid', 'getuid()', '', 1000),
+	('setuid', 'setuid(val)', 'uid_t val = getuid();', 1000), # Setting the process uid to the already existing uid should take as long as setting it elsewhere. Also, permissions may prohibit using any other value easily
+#	('getgid', 'syscall(SYS_getppid)', '', 1000),
+#	('stime', 'syscall(SYS_stime, &t);', 'time_t t;',1000),
 	('getifaddrs', 'getifaddrs(&ifaddr)', 'struct ifaddrs *ifaddr, *ifa;', 1000)
 # Communication
 # ('sigaction', 'syscall(SYS_sigaction,...);, '', 1000) 
@@ -79,3 +90,12 @@ def average(output):
 CreateNewFiles()
 Run()
 DeleteFiles()
+
+
+# References Used
+# https://stackoverflow.com/questions/8798761/c-error-storage-size-of-a-isn-t-known
+# https://stackoverflow.com/questions/8812959/how-to-read-linux-file-permission-programmatically-in-c-c
+# http://man7.org/linux (various pages from here. Examples include http://man7.org/linux/man-pages/man2, and http://man7.org/linux/man-pages/man2/clock_getres.2.html)
+# http://seclab.cs.sunysb.edu/sekar/papers/syscallclassif.htm
+# https://linux.die.net/man/3/clock_settime
+# https://linux.die.net/man/2/stime 
