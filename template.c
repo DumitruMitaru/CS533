@@ -14,17 +14,16 @@
 #include <sys/vfs.h>
 #include <ifaddrs.h>
 #include <linux/random.h>
-//#include <time.h> // https://linux.die.net/man/2/stime
 
 int main(int argc, char* argv[])
 {
 	struct timeval start;
 	struct timeval end;
 	long diff;
-	int rc;
+        long rc;
         // Extra Code
 	gettimeofday(&start, NULL);
-	rc = XXX;
+	rc = (long)XXX;
 	gettimeofday(&end, NULL);
 	if(rc == -1)
 		printf("-1,");

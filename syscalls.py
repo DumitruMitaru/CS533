@@ -11,7 +11,7 @@ systemcalls = [
 
 # Process Control
 	('fork', 'syscall(SYS_fork);', '',1000), 
-	('getpid', 'getpid();', '',1000), 
+#	('getpid', 'getpid();', '',1000), 
 	('kill', 'kill(pid, SIGKILL);', 'pid_t pid = fork(); if(pid == 0) while(1);',1000), 
 #	('wait', 'waitpid(pid, &status, WNOHANG);', 'pid_t pid = fork(); int status;', 1000),
 	('brk', 'syscall(SYS_brk);', '', 1000),
@@ -36,8 +36,8 @@ systemcalls = [
         ('clock_gettime', 'syscall(SYS_clock_gettime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000), 
 #        ('clock_getres', 'syscall(SYS_clock_getres, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000),
 #        ('clock_settime', 'syscall(SYS_clock_settime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec; time_spec.tv_sec = 64; time_spec.tv_nsec = 64;', 1000),
-	('gettimeofday', 'syscall(SYS_gettimeofday, &time_val, NULL);', 'struct timeval time_val;', 1000),
-	('getpid', 'getpid();', '', 1000),
+	('gettimeofday', 'gettimeofday(&time_val, NULL);', 'struct timeval time_val;', 1000),
+	('getpid', 'getpid()', '', 1000),
 #        ('getppid', 'getppid()', '', 1000),
         ('getuid', 'getuid()', '', 1000),
         ('setuid', 'setuid(val)', 'uid_t val = getuid();', 1000), # Setting the process uid to the already existing uid should take as long as setting it elsewhere. Also, permissions may prohibit using any other value easily
@@ -78,7 +78,7 @@ def Run():
 		output = ""
 		for run in range(runs):
 			output += sp.check_output(os.path.abspath(name))
-		# print name, average(output), 'usec'
+		print name, average(output), 'usec'
 
 def average(output):
 	times = [int(i) for i in output.split(',')[0:-1]] 
@@ -97,4 +97,5 @@ DeleteFiles()
 # https://stackoverflow.com/questions/8812959/how-to-read-linux-file-permission-programmatically-in-c-c
 # http://man7.org/linux (various pages from here. Examples include http://man7.org/linux/man-pages/man2, and http://man7.org/linux/man-pages/man2/clock_getres.2.html)
 # http://seclab.cs.sunysb.edu/sekar/papers/syscallclassif.htm
-# https://linux.die.net/man/3/clock_settime 
+# https://linux.die.net/man/3/clock_settime
+# https://linux.die.net/man/2/stime 
