@@ -45,6 +45,7 @@ systemcalls = [
 #	('stime', 'syscall(SYS_stime, &t);', 'time_t t;',1000),
 	('getifaddrs', 'getifaddrs(&ifaddr)', 'struct ifaddrs *ifaddr, *ifa;', 1000)
 # Communication
+# test
 # ('sigaction', 'syscall(SYS_sigaction,...);, '', 1000) 
 # ('sigreturn', 'syscall(SYS_sigreturn,...);, '', 1000) 
 ]
