@@ -15,6 +15,9 @@
 #include <sys/vfs.h>
 #include <ifaddrs.h>
 #include <linux/random.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 
 int main(int argc, char* argv[])
 {
@@ -22,6 +25,12 @@ int main(int argc, char* argv[])
 	struct timeval end;
 	long diff;
         long rc;
+
+        int sck_desc;
+        struct sockaddr_in server;
+        char *message_socket;
+        char reply[500];
+
         // Extra Code
 	gettimeofday(&start, NULL);
 	rc = (long)XXX;
