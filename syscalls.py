@@ -44,7 +44,6 @@ systemcalls = [
 #	('getgid', 'syscall(SYS_getppid)', '', 1000),
 #	('stime', 'syscall(SYS_stime, &t);', 'time_t t;',1000),
 	('getifaddrs', 'getifaddrs(&ifaddr)', 'struct ifaddrs *ifaddr, *ifa;', 1000),
-	
 # Communication
 	('create socket', 'socket(AF_INET , SOCK_STREAM , 0);', '', 1000),
         # create socket
