@@ -46,6 +46,15 @@ systemcalls = [
 	('getifaddrs', 'getifaddrs(&ifaddr)', 'struct ifaddrs *ifaddr, *ifa;', 1000),
 	
 # Communication
+	('msgget', 'msgget(key, 0666|IPC_CREAT);','', 1000),
+        # msgget creates a message queue and returns identifier
+        ('msgsnd', 'msgsnd(msgid, &message, sizeof(message), 0);', 'message.message_type = 1; strcpy(message.message_text, "data");', 1000),
+        # msgsnd to send message
+        ('msgrcv', 'msgrcv(msgid, &message, sizeof(message), 1, 0);', 'message.message_type = 1; strcpy(message.message_text, "write data"); msgsnd(msgid, &message, sizeof(message), 0);', 1000),
+        # msgrcv to receive message
+        ('msgctl', 'msgctl(msgid, IPC_RMID, NULL);', '', 1000),
+        # destroy the message queue with msgctl system call
+
 	('create socket', 'socket(AF_INET , SOCK_STREAM , 0);', '', 1000),
         # create socket
         ('connect', 'connect(sck_desc , (struct sockaddr *)&server , sizeof(server));', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("8.8.8.8"); server.sin_family = AF_INET; server.sin_port = htons(443);', 1000),
@@ -53,8 +62,9 @@ systemcalls = [
         ('send', 'send(sck_desc , message_socket , strlen(message_socket) , 0);', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("8.8.8.8"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1"; ', 1000),
         # send 
         ('receive', 'recv(sck_desc, reply , 1000 , 0)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("8.8.8.8"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1"; send(sck_desc , message_socket , strlen(message_socket) , 0);', 1000),
-        # close socket
+        # recieve
         ('close socket', 'close(sck_desc);', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("8.8.8.8"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1";', 1000),
+	# close socket
 # ('sigaction', 'syscall(SYS_sigaction,...);, '', 1000) 
 # ('sigreturn', 'syscall(SYS_sigreturn,...);, '', 1000) 
 ]
