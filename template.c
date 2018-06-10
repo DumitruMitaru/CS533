@@ -18,6 +18,13 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+
+struct message_buffer{
+        long message_type;
+        char message_text[10];
+}message;
 
 int main(int argc, char* argv[])
 {
@@ -25,6 +32,10 @@ int main(int argc, char* argv[])
 	struct timeval end;
 	long diff;
         long rc;
+
+	srand(time(0)); 
+        key_t key = ftok("/", rand());
+        int msgid = msgget(key, 0666 | IPC_CREAT);
 
         int sck_desc;
         struct sockaddr_in server;
