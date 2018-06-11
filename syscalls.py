@@ -26,7 +26,7 @@ systemcalls = [
 	('ioctl_random', 'syscall(SYS_ioctl, fd, RNDZAPENTCNT, NULL)', 'int fd = open("/dev/random", O_RDONLY);', 'close(fd);', 1000),
 	('ioctl_tty', 'syscall(SYS_ioctl, fd, TIOCGWINSZ, &winsz)', 'int fd = open("/dev/tty", O_RDONLY); struct winsize winsz;', 'close(fd);', 1000),
 	('getitimer', 'syscall(SYS_getitimer, ITIMER_REAL, &curr_value)', 'struct itimerval curr_value;', '', 1000),
-	('read_urandom', 'syscall(SYS_read, fd, &buf, 10)', 'int fd = open("/dev/urandom", O_RDONLY); char buf[10];', 'close(fd);', 1),
+	('read_urandom', 'syscall(SYS_read, fd, &buf, 10)', 'int fd = open("/dev/urandom", O_RDONLY); char buf[10];', 'close(fd);', 1000),
 	('write_null', 'syscall(SYS_write, fd, "123456789", 10)', 'int fd = open("/dev/null", O_WRONLY);', 'close(fd);', 1000),
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', '', 1000),
@@ -60,7 +60,7 @@ systemcalls = [
         # connect to server
         ('send', 'send(sck_desc , message_socket , strlen(message_socket) , 0)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("216.58.216.142"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1"; ', 'close(sck_desc);', 1000),
         # send 
-        ('receive', 'recv(sck_desc, reply , 1000 , 0)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("216.58.216.142"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1"; send(sck_desc , message_socket , strlen(message_socket) , 0);', 'close(sck_desc);', 50),
+        ('receive', 'recv(sck_desc, reply , 1000 , 0)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("216.58.216.142"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1"; send(sck_desc , message_socket , strlen(message_socket) , 0);', 'close(sck_desc);', 1000),
         # recieve
         ('close socket', 'close(sck_desc)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("216.58.216.142"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server));', '', 1000),
 	# close socket
