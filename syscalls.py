@@ -23,10 +23,10 @@ systemcalls = [
 	('read', 'fscanf(fp,"%s", buff)', 'char buff[255]; FILE* fp = fopen("test.txt", "r");', 'fclose(fp);', 1000),
 	('write', 'fprintf(fp, "datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata")', 'FILE* fp = fopen("test.txt", "w");', 'fclose(fp);', 1000),
 # Device Management
-	('ioctl_random', 'syscall(SYS_ioctl, fd, RNDZAPENTCNT, NULL)', 'int fd = open("/dev/random", O_RDONLY);', '', 1000),
-	('ioctl_tty', 'syscall(SYS_ioctl, fd, TIOCGWINSZ, &winsz)', 'int fd = open("/dev/tty", O_RDONLY); struct winsize winsz;', '', 1000),
+	('ioctl_random', 'syscall(SYS_ioctl, fd, RNDZAPENTCNT, NULL)', 'int fd = open("/dev/random", O_RDONLY);', 'close(fd);', 1000),
+	('ioctl_tty', 'syscall(SYS_ioctl, fd, TIOCGWINSZ, &winsz)', 'int fd = open("/dev/tty", O_RDONLY); struct winsize winsz;', 'close(fd);', 1000),
 	('getitimer', 'syscall(SYS_getitimer, ITIMER_REAL, &curr_value)', 'struct itimerval curr_value;', '', 1000),
-	('read_random', 'syscall(SYS_read, fd, &buf, 10)', 'int fd = open("/dev/urandom", O_RDONLY); char buf[10];', 'close(fd);', 1),
+	('read_urandom', 'syscall(SYS_read, fd, &buf, 10)', 'int fd = open("/dev/urandom", O_RDONLY); char buf[10];', 'close(fd);', 1),
 	('write_null', 'syscall(SYS_write, fd, "123456789", 10)', 'int fd = open("/dev/null", O_WRONLY);', 'close(fd);', 1000),
 # Information Maintenence
 	('getrusage', 'syscall(SYS_getrusage, RUSAGE_SELF, &usage)', 'struct rusage usage;', '', 1000),
