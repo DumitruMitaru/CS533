@@ -31,23 +31,25 @@ int main(int argc, char* argv[])
 	struct timeval start;
 	struct timeval end;
 	long diff;
-        long rc;
+	long rc;
+	int i;
 
-        int sck_desc;
-        struct sockaddr_in server;
-        char *message_socket;
-        char reply[500];
+	int sck_desc;
+	struct sockaddr_in server;
+	char *message_socket;
+	char reply[500];
 
         // Pre-Exec Code
 	gettimeofday(&start, NULL);
-	rc = (long)XXX;
+	for (i=0; i<YYY; ++i)
+		rc = (long)XXX;
 	gettimeofday(&end, NULL);
 	// Post-Exec Code
 	if(rc == -1)
-		printf("-1,");
+		printf("-1");
 	else
 		diff = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec);
-	printf("%li,", diff);
+	printf("%li", diff);
 	return 0;
 }
 

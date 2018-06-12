@@ -84,6 +84,8 @@ def CreateNewFiles():
 		for line in lines:
 			if 'XXX' in line:
 				line = line.replace('XXX', code)
+			if 'YYY' in line:
+				line = line.replace('YYY', str(runs))
 			if '// Pre-Exec Code' in line:
 				line = line.replace('// Pre-Exec Code', pre_exec_code)
 			if '// Post-Exec Code' in line:
@@ -97,9 +99,10 @@ def CreateNewFiles():
 def Run():
 	for name, c, pre, post, runs in systemcalls:
 		output = ""
-		for run in range(runs):
-			output += sp.check_output(os.path.abspath(name))
-		print name, average(output), 'usec'
+		# for run in range(runs):
+		# 	output += sp.check_output(os.path.abspath(name))
+		# print name, average(output), 'usec'
+		print name, sp.check_output(os.path.abspath(name)), "usec"
 
 def average(output):
 	times = [int(i) for i in output.split(',')[0:-1]] 
