@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
 		printf("-1");
 	else
 		diff = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec);
+		diff /= YYY
 	printf("%li", diff);
 	return 0;
 }
