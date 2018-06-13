@@ -13,6 +13,10 @@ MAX=31
 # Allows user to specify the path of the output file by passing it in as a paremeter
 OUTFILE=$1
 
+# Sleep for 15 seconds, giving the user the chance to log out of the sytem before the test begin
+# Lest the active terminal session muck with the results
+sleep 15
+
 while [ $COUNT -lt $MAX ]; do
 	# Run Test
 	echo Run $COUNT:>> $OUTFILE
