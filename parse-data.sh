@@ -4,8 +4,9 @@
 # Purpose: processes output from the run-syscall-tests bash script (which runs the python-based system call testing script a given number of times and outputs results to a file)
 
 # Name of input file (containing the initial data) and output (contianing the filtered version of the data)
-INPUTFILEPATH=syscall-test-output-xen.txt
-OUTPUTFILENAME=results.txt
+# $1 and $2 are strings recieved at the command line, so the user of the script can specify the input/output files of the command
+INPUTFILEPATH=$1
+OUTPUTFILENAME=$2
 
 # System call name array (must match name printed on output of script)
 # https://stackoverflow.com/questions/8880603/loop-through-an-array-of-strings-in-bash
@@ -22,23 +23,24 @@ SYSCALLS=(
     "ioctl_random"
     "ioctl_tty"
     "getitimer"
-    "read_random"
+    "read_urandom"
     "write_null"
     "getrusage"
     "stat"
     "statfs"
     "time"
     "clock_gettime"
-    "gettimeofday"
+    "gettimeofday_timed"
+    "gettimeofday_two_direct_calls_with_nothing_in_between"
     "getpid"
     "getuid"
     "setuid"
     "getifaddrs"
-    "create socket"
+    "create_socket"
     "connect"
     "send"
     "receive"
-    "close socket"
+    "close_socket"
     )
 
 # https://stackoverflow.com/questions/8880603/loop-through-an-array-of-strings-in-bash
