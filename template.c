@@ -18,6 +18,13 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+
+struct message_buffer{
+        long message_type;
+        char message_text[10];
+}message;
 
 int main(int argc, char* argv[])
 {
@@ -31,15 +38,17 @@ int main(int argc, char* argv[])
         char *message_socket;
         char reply[500];
 
-        // Extra Code
+        // Pre-Exec Code
 	gettimeofday(&start, NULL);
 	rc = (long)XXX;
 	gettimeofday(&end, NULL);
+	// Post-Exec Code
 	if(rc == -1)
 		printf("-1,");
 	else
 		diff = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec);
 	printf("%li,", diff);
+	return 0;
 }
 
 // https://www.improgrammer.net/type-casting-c-language/
