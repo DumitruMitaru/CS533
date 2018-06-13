@@ -36,8 +36,8 @@ systemcalls = [
   	('clock_gettime', 'syscall(SYS_clock_gettime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', '', 1000), 
 # ('clock_getres', 'syscall(SYS_clock_getres, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000),
 # ('clock_settime', 'syscall(SYS_clock_settime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec; time_spec.tv_sec = 64; time_spec.tv_nsec = 64;', 1000),
-	('gettimeofday', 'gettimeofday(&time_val, NULL)', 'struct timeval time_val;', '', 1000),
-        ('gettimeofday, hopefully unbiased runtime', '0;', '', 'gettimeofday(&start, NULL); gettimeofday(&end, NULL);', 1000),
+	('gettimeofday_timed', 'gettimeofday(&time_val, NULL)', 'struct timeval time_val;', '', 1000),
+        ('gettimeofday_two_direct_calls_with_nothing_in_between', '0;', '', 'gettimeofday(&start, NULL); gettimeofday(&end, NULL);', 1000),
         ('getpid', 'getpid()', '', '', 1000),
 #	('getppid', 'getppid()', '', 1000),
 	('getuid', 'getuid()', '', '', 1000),
@@ -45,7 +45,6 @@ systemcalls = [
 #	('getgid', 'syscall(SYS_getppid)', '', 1000),
 #	('stime', 'syscall(SYS_stime, &t);', 'time_t t;',1000),
 	('getifaddrs', 'getifaddrs(&ifaddr)', 'struct ifaddrs *ifaddr, *ifa;', '', 1000),
-	
 # Communication
 	('msgget', 'msgget(key, 0666|IPC_CREAT)', 'srand(time(0)); key_t key = ftok("/", rand());', 'msgctl((int)rc, IPC_RMID, NULL);', 1000),
         # msgget creates a message queue and returns identifier
@@ -55,16 +54,21 @@ systemcalls = [
         # msgrcv to receive message
         ('msgctl', 'msgctl(msgid, IPC_RMID, NULL)', 'srand(time(0)); key_t key = ftok("/", rand()); int msgid = msgget(key, 0666 | IPC_CREAT);', '', 1000),
         # destroy the message queue with msgctl system call
-	('create socket', 'socket(AF_INET , SOCK_STREAM , 0)', '', '', 1000),
+	('create_socket', 'socket(AF_INET , SOCK_STREAM , 0)', '', '', 1000),
         # create socket
-        ('connect', 'connect(sck_desc , (struct sockaddr *)&server , sizeof(server))', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("216.58.216.142"); server.sin_family = AF_INET; server.sin_port = htons(443);', 'close(sck_desc);', 1000),
+        ('connect', 'connect(sck_desc , (struct sockaddr *)&server , sizeof(server))', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("192.168.1.11"/*"216.58.216.142"*/); server.sin_family = AF_INET; server.sin_port = htons(80/*443*/);', 'close(sck_desc);', 1000),
         # connect to server
-        ('send', 'send(sck_desc , message_socket , strlen(message_socket) , 0)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("216.58.216.142"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1"; ', 'close(sck_desc);', 1000),
-        # send 
-        ('receive', 'recv(sck_desc, reply , 1000 , 0)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("216.58.216.142"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1"; send(sck_desc , message_socket , strlen(message_socket) , 0);', 'close(sck_desc);', 1000),
+        # utilizes address of server on local network. This address can be changed to attempt to connect to a different server
+        ('send', 'send(sck_desc , message_socket , strlen(message_socket) , 0)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("192.168.1.11"); server.sin_family = AF_INET; server.sin_port = htons(80); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1"; ', 'close(sck_desc);', 1000),
+        # send
+        # utlizes address of server on local network. This address can be changed to attempt to connect to a different network
+        ('receive', 'recv(sck_desc, reply , 1000 , 0)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("192.168.1.11"); server.sin_family = AF_INET; server.sin_port = htons(80); connect(sck_desc , (struct sockaddr *)&server , sizeof(server)); message_socket = "GET / HTTP/1.1\\n"; send(sck_desc , message_socket , strlen(message_socket) , 0);', 'close(sck_desc);', 1000),
         # recieve
-        ('close socket', 'close(sck_desc)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("216.58.216.142"); server.sin_family = AF_INET; server.sin_port = htons(443); connect(sck_desc , (struct sockaddr *)&server , sizeof(server));', '', 1000),
+        # utilizes address of server on local network. This address can be changed to attempt to connect to a different network
+        # Note, the GET command is bad, but I had to write it this way to get a response from the server I was querying
+        ('close_socket', 'close(sck_desc)', 'sck_desc = socket(AF_INET , SOCK_STREAM , 0); server.sin_addr.s_addr = inet_addr("192.168.1.11"); server.sin_family = AF_INET; server.sin_port = htons(80); connect(sck_desc , (struct sockaddr *)&server , sizeof(server));', '', 1000),
 	# close socket
+        # utilizes address of server on local network. This address can be changed to attempt to connect to a different network
 # ('sigaction', 'syscall(SYS_sigaction,...);, '', 1000) 
 # ('sigreturn', 'syscall(SYS_sigreturn,...);, '', 1000) 
 ]
