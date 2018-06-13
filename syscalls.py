@@ -37,7 +37,8 @@ systemcalls = [
 # ('clock_getres', 'syscall(SYS_clock_getres, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec;', 1000),
 # ('clock_settime', 'syscall(SYS_clock_settime, _POSIX_CPUTIME, &time_spec)', 'struct timespec time_spec; time_spec.tv_sec = 64; time_spec.tv_nsec = 64;', 1000),
 	('gettimeofday', 'gettimeofday(&time_val, NULL)', 'struct timeval time_val;', '', 1000),
-	('getpid', 'getpid()', '', '', 1000),
+        ('gettimeofday, hopefully unbiased runtime', '0;', '', 'gettimeofday(&start, NULL); gettimeofday(&end, NULL);', 1000),
+        ('getpid', 'getpid()', '', '', 1000),
 #	('getppid', 'getppid()', '', 1000),
 	('getuid', 'getuid()', '', '', 1000),
 	('setuid', 'setuid(val)', 'uid_t val = getuid();', '', 1000), # Setting the process uid to the already existing uid should take as long as setting it elsewhere. Also, permissions may prohibit using any other value easily
